@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Survey
+from .models import AdminUser
 
-admin.site.register(Survey)
+# Register your models here.
+admin.site.register(AdminUser)
 
