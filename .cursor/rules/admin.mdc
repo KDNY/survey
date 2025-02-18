@@ -1,0 +1,49 @@
+---
+description: admin section
+globs: 
+---
+
+he **Admin Panel** allows administrators to **manage testing items** and ensure the system is properly set up for users. Here’s a breakdown of the fields the **admin will fill in**:
+
+---
+
+### **📌 Fields for Admin to Fill In**
+| **Field Name** | **Description** | **Type** |
+|---------------|---------------|---------|
+| **Testing Item Name (English)** | The test name in English | Text |
+| **Testing Item Name (Second Language)** | The test name in a second language | Text |
+| **Reference Range** | The normal range for this test | Text or Number |
+| **Measurement Unit** | The unit of measurement (e.g., mg/dL, mmol/L) | Text |
+| **Risk Level Thresholds** | Values indicating low, normal, or high risk | Number |
+| **Interpretation Guidelines** | Text-based guidance on test results | Text |
+| **Additional Notes** | Any additional medical or admin notes | Text |
+
+---
+
+### **📌 Example Testing Items Admin Can Input**
+| **Testing Item (EN)** | **Testing Item (Second Language)** | **Reference Range** | **Unit** | **Risk Level Thresholds** |
+|----------------------|---------------------------------|----------------|--------|----------------------|
+| Blood Viscosity | 血液粘度 | 1.3 - 1.7 | mPa·s | High: >1.7, Low: <1.3 |
+| Total Cholesterol (TC) | 总胆固醇 | 125 - 200 | mg/dL | High: >200, Low: <125 |
+| Triglyceride (TG) | 甘油三酯 | 50 - 150 | mg/dL | High: >150, Low: <50 |
+| High-Density Lipoprotein (HDL-C) | 高密度脂蛋白 | 40 - 60 | mg/dL | Low: <40 |
+| Low-Density Lipoprotein (LDL-C) | 低密度脂蛋白 | 70 - 130 | mg/dL | High: >130 |
+| Neutral Fat (MB) | 中性脂肪 | 3.5 - 5.2 | mmol/L | High: >5.2, Low: <3.5 |
+| Circulating Immune Complex (CIC) | 循环免疫复合物 | 1.5 - 4.0 | μg/mL | High: >4.0, Low: <1.5 |
+
+---
+
+### **📌 Admin Panel Features**
+###**Add/Edit/Delete Testing Items**  
+###**Set Reference Ranges & Risk Levels**  
+### **Provide Guidelines for Result Interpretation**  
+### **View & Manage User Test Data**  
+###Create the database schema first
+###Start with the admin form
+###Set up the table view
+###Add the validation logic
+###Add admin role to Supabase?
+###Add admin management interface
+###Add role-based access control to existing components
+###Add "Remember me" functionality
+###Add password reset option
