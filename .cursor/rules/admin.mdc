@@ -3,7 +3,7 @@ description: admin section
 globs: 
 ---
 
-he **Admin Panel** allows administrators to **manage testing items** and ensure the system is properly set up for users. Here’s a breakdown of the fields the **admin will fill in**:
+he **Admin Panel** allows administrators to **manage testing items** and ensure the system is properly set up for users. Here's a breakdown of the fields the **admin will fill in**:
 
 ---
 
@@ -47,18 +47,3 @@ he **Admin Panel** allows administrators to **manage testing items** and ensure 
 ###Add role-based access control to existing components
 ###Add "Remember me" functionality
 ###Add password reset option
-
-ALTER TABLE users ADD COLUMN user_metadata JSONB;
-UPDATE users
-SET user_metadata = user_metadata || '{"email_verified": true, "role": "admin"}'
-WHERE email = 'user@example.com';
-SELECT user_metadata FROM users WHERE email = 'user@example.com';
-   UPDATE users
-   SET user_metadata = COALESCE(user_metadata, '{}'::jsonb) || '{"email_verified": true, "role": "admin"}'
-   WHERE email = 'user@example.com';
-
-   UPDATE users
-   SET raw_user_meta_data = COALESCE(raw_user_meta_data, '{}'::jsonb) || '{"email_verified": true, "role": "admin"}'
-   WHERE email = 'kevin@dialpos.com';
-
-SELECT raw_user_meta_data FROM users WHERE email = 'kevin@dialpos.com';
