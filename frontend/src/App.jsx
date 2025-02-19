@@ -5,6 +5,9 @@ import supabase from './lib/supabase'
 import Login from './components/Login'
 import AuthPage from './components/AuthPage'
 import { checkAdminAccess } from './utils/auth'
+import TestingItemForm from './components/TestingItemForm'
+import TestingItemsList from './components/TestingItemsList'
+import UserTestForm from './components/UserTestForm'
 
 function App() {
   const [user, setUser] = useState(null)
@@ -102,30 +105,61 @@ function App() {
             loading ? (
               <div>Loading...</div>
             ) : isAdmin ? (
-              <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-5">
-                <div className="w-full max-w-4xl">
-                  <div className="flex justify-between items-center mb-8">
-                    <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-                    <button
-                      onClick={handleLogout}
-                      className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                    >
-                      Logout
-                    </button>
+              <div className="min-h-screen bg-gray-100">
+                {/* Top Navigation Bar */}
+                <nav className="bg-white shadow-sm">
+                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex justify-between h-16">
+                      <div className="flex items-center">
+                        <button
+                          onClick={handleLogout}
+                          className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700"
+                        >
+                          Logout
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  
-                  {/* Survey Management Section */}
-                  <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-                    <h2 className="text-xl font-semibold mb-4">Survey Management</h2>
-                    <form onSubmit={handleSubmit} className="mb-6">
-                      {/* Your existing survey form */}
-                    </form>
-                  </div>
+                </nav>
 
-                  {/* Survey List Section */}
-                  <div className="bg-white rounded-lg shadow-md p-6">
-                    <h2 className="text-xl font-semibold mb-4">Survey Responses</h2>
-                    {/* Your existing survey list */}
+                {/* Main Content */}
+                <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+                  <div className="px-4 py-6 sm:px-0">
+                    {/* Testing Items Section */}
+                    <div className="bg-white rounded-lg shadow mb-6">
+                      <div className="px-6 py-4 border-b border-gray-200">
+                        <h2 className="text-xl font-semibold text-gray-800">Testing Items Management</h2>
+                      </div>
+                      {/*hide sample data*/}
+                      <div className="p-6">
+                        <TestingItemForm 
+                          onSubmit={() => {
+                            window.location.reload()
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Testing Items List */}
+                    <div className="bg-white rounded-lg shadow mb-6">
+                      <div className="px-6 py-4 border-b border-gray-200">
+                        <h2 className="text-xl font-semibold text-gray-800">Testing Items List</h2>
+                      </div>
+                      <div className="p-6">
+                        <TestingItemsList />
+                      </div>
+                    </div>
+
+                    {/* User Test Results Section */}
+                    <div className="bg-white rounded-lg shadow">
+                      <div className="px-6 py-4 border-b border-gray-200">
+                        <h2 className="text-xl font-semibold text-gray-800">User Test Results</h2>
+                      </div>
+                      <div className="p-6">
+                        {/* Add user test results component here */}
+                        <p className="text-gray-500">User test results will be displayed here</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -148,8 +182,21 @@ function App() {
           path="/" 
           element={
             user ? (
-              <div>
-                <h1>Welcome, {user.user_metadata?.name || user.email}</h1>
+              <div className="min-h-screen bg-gray-100 py-6">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  <div className="flex justify-between items-center mb-8">
+                    <h1 className="text-2xl font-bold">
+                      Welcome, {user.user_metadata?.name || user.email}
+                    </h1>
+                    <button
+                      onClick={handleLogout}
+                      className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                  <UserTestForm user={user} />
+                </div>
               </div>
             ) : (
               <Navigate to="/auth" replace />

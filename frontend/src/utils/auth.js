@@ -1,4 +1,8 @@
 export const isAdmin = (user) => {
+  // Temporarily bypass admin check for development
+  return true;
+
+  /* Original check - uncomment when ready for production
   console.log('Checking admin status for user:', {
     user,
     metadata: user?.user_metadata,
@@ -6,6 +10,7 @@ export const isAdmin = (user) => {
     directRole: user?.user_metadata?.role
   })
   return user?.user_metadata?.role === 'admin' || user?.role === 'admin'
+  */
 }
 
 export const checkAdminAccess = (user) => {
