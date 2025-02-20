@@ -99,10 +99,16 @@ function App() {
                   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
                       <div className="flex items-center">
+                        <h1 className="text-xl font-semibold text-gray-800">Admin Dashboard</h1>
+                      </div>
+                      <div className="flex items-center">
                         <button
                           onClick={handleLogout}
-                          className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700"
+                          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                         >
+                          <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                          </svg>
                           Logout
                         </button>
                       </div>
@@ -114,11 +120,10 @@ function App() {
                 <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
                   <div className="px-4 py-6 sm:px-0">
                     {/* Testing Items Section */}
-                    <div className="bg-white rounded-lg shadow mb-6">
+                    <div className="bg-white rounded-lg shadow-lg mb-6">
                       <div className="px-6 py-4 border-b border-gray-200">
                         <h2 className="text-xl font-semibold text-gray-800">Testing Items Management</h2>
                       </div>
-                      {/*hide sample data*/}
                       <div className="p-6">
                         <TestingItemForm 
                           onSubmit={() => {
@@ -129,7 +134,7 @@ function App() {
                     </div>
 
                     {/* Testing Items List */}
-                    <div className="bg-white rounded-lg shadow mb-6">
+                    <div className="bg-white rounded-lg shadow-lg mb-6">
                       <div className="px-6 py-4 border-b border-gray-200">
                         <h2 className="text-xl font-semibold text-gray-800">Testing Items List</h2>
                       </div>
@@ -139,12 +144,11 @@ function App() {
                     </div>
 
                     {/* User Test Results Section */}
-                    <div className="bg-white rounded-lg shadow">
+                    <div className="bg-white rounded-lg shadow-lg">
                       <div className="px-6 py-4 border-b border-gray-200">
                         <h2 className="text-xl font-semibold text-gray-800">User Test Results</h2>
                       </div>
                       <div className="p-6">
-                        {/* Add user test results component here */}
                         <p className="text-gray-500">User test results will be displayed here</p>
                       </div>
                     </div>
