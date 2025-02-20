@@ -12,39 +12,36 @@ import UserTestForm from './components/UserTestForm'
 function App() {
   const [user, setUser] = useState(null)
   const [isAdmin, setIsAdmin] = useState(false)
-  const [surveys, setSurveys] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [newSurvey, setNewSurvey] = useState({ question: '', answer: '' })
 
   useEffect(() => {
     const initializeAuth = async () => {
       try {
+        console.log('Starting auth initialization...')
         setLoading(true)
-        // Get current session
         const { data: { session } } = await supabase.auth.getSession()
         const currentUser = session?.user ?? null
+        
+        console.log('Current user:', currentUser)
         
         if (currentUser) {
           setUser(currentUser)
           const adminStatus = await checkAdminAccess(currentUser)
+          console.log('Admin status:', adminStatus)
           setIsAdmin(adminStatus)
-          fetchSurveys()
-        } else {
-          setUser(null)
-          setIsAdmin(false)
         }
       } catch (error) {
         console.error('Auth initialization error:', error)
         setError(error.message)
       } finally {
+        console.log('Auth initialization complete')
         setLoading(false)
       }
     }
 
     initializeAuth()
 
-    // Set up auth state change listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       const currentUser = session?.user ?? null
       setUser(currentUser)
@@ -58,46 +55,6 @@ function App() {
 
     return () => subscription.unsubscribe()
   }, [])
-
-  const fetchSurveys = async () => {
-    try {
-      setLoading(true)
-      const { data, error } = await supabase
-        .from('surveys')
-        .select('*')
-        .order('created_at', { ascending: false })
-      
-      if (error) {
-        throw error
-      }
-
-      console.log('Surveys loaded:', data)
-      setSurveys(data || [])
-    } catch (error) {
-      console.error('Error:', error)
-      setError(error.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    try {
-      const { data, error } = await supabase
-        .from('surveys')
-        .insert([newSurvey])
-        .select()
-
-      if (error) throw error
-
-      setSurveys([...surveys, data[0]])
-      setNewSurvey({ question: '', answer: '' })
-    } catch (error) {
-      console.error('Error:', error)
-      alert(error.message)
-    }
-  }
 
   const handleLogout = async () => {
     try {
@@ -133,6 +90,7 @@ function App() {
             loading ? (
               <div className="flex items-center justify-center min-h-screen">
                 <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+                <div className="ml-4 text-lg text-gray-600">Loading...</div>
               </div>
             ) : isAdmin ? (
               <div className="min-h-screen bg-gray-100">
