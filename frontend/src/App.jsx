@@ -18,21 +18,42 @@ function App() {
   const [newSurvey, setNewSurvey] = useState({ question: '', answer: '' })
 
   useEffect(() => {
-    // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      const currentUser = session?.user ?? null
-      setUser(currentUser)
-      setIsAdmin(checkAdminAccess(currentUser))
-      if (currentUser) {
-        fetchSurveys()
+    const initializeAuth = async () => {
+      try {
+        setLoading(true)
+        // Get current session
+        const { data: { session } } = await supabase.auth.getSession()
+        const currentUser = session?.user ?? null
+        
+        if (currentUser) {
+          setUser(currentUser)
+          const adminStatus = await checkAdminAccess(currentUser)
+          setIsAdmin(adminStatus)
+          fetchSurveys()
+        } else {
+          setUser(null)
+          setIsAdmin(false)
+        }
+      } catch (error) {
+        console.error('Auth initialization error:', error)
+        setError(error.message)
+      } finally {
+        setLoading(false)
       }
-    })
+    }
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    initializeAuth()
+
+    // Set up auth state change listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       const currentUser = session?.user ?? null
       setUser(currentUser)
-      setIsAdmin(checkAdminAccess(currentUser))
+      if (currentUser) {
+        const adminStatus = await checkAdminAccess(currentUser)
+        setIsAdmin(adminStatus)
+      } else {
+        setIsAdmin(false)
+      }
     })
 
     return () => subscription.unsubscribe()
@@ -82,17 +103,24 @@ function App() {
     try {
       await supabase.auth.signOut()
       setUser(null)
+      setIsAdmin(false)
     } catch (error) {
       console.error('Error logging out:', error)
     }
   }
 
   const handleAdminLogin = async (user) => {
-    if (checkAdminAccess(user)) {
-      setUser(user)
-      setIsAdmin(true)
-    } else {
-      setError('Access denied. Admin privileges required.')
+    try {
+      const adminStatus = await checkAdminAccess(user)
+      if (adminStatus) {
+        setUser(user)
+        setIsAdmin(true)
+      } else {
+        setError('Access denied. Admin privileges required.')
+      }
+    } catch (error) {
+      console.error('Admin login error:', error)
+      setError(error.message)
     }
   }
 
@@ -103,7 +131,9 @@ function App() {
           path="/admin" 
           element={
             loading ? (
-              <div>Loading...</div>
+              <div className="flex items-center justify-center min-h-screen">
+                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+              </div>
             ) : isAdmin ? (
               <div className="min-h-screen bg-gray-100">
                 {/* Top Navigation Bar */}

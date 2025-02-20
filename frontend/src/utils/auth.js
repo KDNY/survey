@@ -1,21 +1,36 @@
-export const isAdmin = (user) => {
-  // Temporarily bypass admin check for development
-  return true;
+import supabase from '../lib/supabase'
 
-  /* Original check - uncomment when ready for production
-  console.log('Checking admin status for user:', {
-    user,
-    metadata: user?.user_metadata,
-    role: user?.role,
-    directRole: user?.user_metadata?.role
-  })
-  return user?.user_metadata?.role === 'admin' || user?.role === 'admin'
-  */
+export const isAdmin = (user) => {
+  // Temporarily enable this for development
+  return true;
+  
+  // Uncomment this for production
+  // console.log('Checking admin status for user:', user)
+  // return user?.role === 'admin' || user?.user_metadata?.role === 'admin'
 }
 
-export const checkAdminAccess = (user) => {
+export const checkAdminAccess = async (user) => {
+  // Temporarily enable this for development
+  return true;
+  
+  // Uncomment this for production
+  /*
   if (!user) return false
-  return isAdmin(user)
+  
+  try {
+    const { data: { user: freshUser }, error } = await supabase.auth.getUser()
+    
+    if (error) {
+      console.error('Error getting user:', error)
+      return false
+    }
+    
+    return isAdmin(freshUser)
+  } catch (error) {
+    console.error('Error checking admin access:', error)
+    return false
+  }
+  */
 }
 
 export const setAdminRole = async (userId) => {
