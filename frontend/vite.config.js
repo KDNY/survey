@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react({
-    include: "**/*.{jsx,js}",
+    include: "**/*.{jsx,js}"
   })],
   server: {
     port: 3000,
@@ -20,6 +20,6 @@ export default defineConfig({
   esbuild: {
     loader: 'jsx',
     include: /src\/.*\.jsx?$/,
-    exclude: [],
+    exclude: []
   }
 })
