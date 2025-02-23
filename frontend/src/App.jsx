@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import './App.css'
 import supabase from './lib/supabase'
 import Login from './components/Login'
@@ -10,6 +10,8 @@ import TestingItemsList from './components/TestingItemsList'
 import UserTestForm from './components/UserTestForm'
 import AdminTestResults from './components/AdminTestResults'
 import AdminDashboard from './components/AdminDashboard'
+import UserLogin from './components/UserLogin'
+import UserSignup from './components/UserSignup'
 
 function App() {
   const [user, setUser] = useState(null)
@@ -71,12 +73,8 @@ function App() {
   const handleAdminLogin = async (user) => {
     try {
       const adminStatus = await checkAdminAccess(user)
-      if (adminStatus) {
-        setUser(user)
-        setIsAdmin(true)
-      } else {
-        setError('Access denied. Admin privileges required.')
-      }
+      setIsAdmin(adminStatus)
+      setUser(user)
     } catch (error) {
       console.error('Admin login error:', error)
       setError(error.message)
@@ -94,17 +92,41 @@ function App() {
             ) : isAdmin ? (
               <AdminDashboard />
             ) : (
-              <Navigate to="/auth/login" replace />
+              <Navigate to="/admin/login" replace />
+            )
+          } 
+        />
+        <Route 
+          path="/admin/login" 
+          element={
+            isAdmin ? (
+              <Navigate to="/admin" replace />
+            ) : (
+              <Login onLogin={handleAdminLogin} />
             )
           } 
         />
         <Route 
           path="/auth/login" 
           element={
-            isAdmin ? (
-              <Navigate to="/admin" replace />
+            user ? (
+              <Navigate to="/" replace />
             ) : (
-              <Login onLogin={handleAdminLogin} />
+              <UserLogin 
+                onLogin={setUser}
+              />
+            )
+          } 
+        />
+        <Route 
+          path="/auth/signup" 
+          element={
+            user ? (
+              <Navigate to="/" replace />
+            ) : (
+              <UserSignup 
+                onSignup={setUser}
+              />
             )
           } 
         />

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import supabase from '../lib/supabase'
 
 function UserTestForm({ user }) {
@@ -9,6 +10,7 @@ function UserTestForm({ user }) {
   const [submitting, setSubmitting] = useState(false)
   const [showConfirmation, setShowConfirmation] = useState(false)
   const [submittedData, setSubmittedData] = useState(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchTestingItems()
@@ -132,6 +134,16 @@ This document is confidential and for your personal records.
     document.body.removeChild(a)
   }
 
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut()
+      navigate('/auth/login')
+    } catch (error) {
+      console.error('Error logging out:', error)
+      setError(error.message)
+    }
+  }
+
   if (showConfirmation) {
     return (
       <div className="max-w-4xl mx-auto p-6">
@@ -202,8 +214,27 @@ This document is confidential and for your personal records.
 
   return (
     <div className="max-w-6xl mx-auto p-6">
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Welcome, {user.email}
+          </h1>
+          {user.user_metadata?.name && (
+            <p className="text-gray-600">{user.user_metadata.name}</p>
+          )}
+        </div>
+        <button
+          onClick={handleLogout}
+          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+        >
+          <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          Logout
+        </button>
+      </div>
+
       <div className="bg-white rounded-lg shadow-md">
-        {/* Header Section */}
         <div className="border-b border-gray-200 p-6">
           <h2 className="text-2xl font-bold text-gray-900">Health Test Results</h2>
           <p className="mt-2 text-sm text-gray-600">
@@ -211,7 +242,6 @@ This document is confidential and for your personal records.
           </p>
         </div>
 
-        {/* Error Alert */}
         {error && (
           <div className="mx-6 my-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
             {error}
@@ -219,7 +249,6 @@ This document is confidential and for your personal records.
         )}
 
         <form onSubmit={handleSubmit}>
-          {/* Table Section */}
           <div className="p-6">
             <div className="overflow-x-auto rounded-lg border border-gray-200">
               <table className="min-w-full divide-y divide-gray-200">
@@ -288,7 +317,6 @@ This document is confidential and for your personal records.
             </div>
           </div>
 
-          {/* Footer Section */}
           <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
             <div className="flex items-center justify-between">
               <p className="text-sm text-gray-500">
