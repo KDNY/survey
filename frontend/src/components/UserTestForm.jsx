@@ -138,7 +138,13 @@ This document is confidential and for your personal records.
 
   const handleLogout = async () => {
     try {
-      await supabase.auth.signOut()
+      console.log('Starting logout...')
+      const { error } = await supabase.auth.signOut()
+      if (error) {
+        console.error('Supabase signOut error:', error)
+        throw error
+      }
+      console.log('Signed out successfully')
       navigate('/auth/login')
     } catch (error) {
       console.error('Error logging out:', error)

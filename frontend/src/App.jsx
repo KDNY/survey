@@ -46,7 +46,8 @@ function App() {
 
     initializeAuth()
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('Auth state changed:', event, session)
       const currentUser = session?.user ?? null
       setUser(currentUser)
       if (currentUser) {
