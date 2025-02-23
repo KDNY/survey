@@ -176,7 +176,7 @@ function AdminTestResults() {
               </div>
             ) : (
               <div className="text-center text-gray-500">
-                Select a user to view their test results
+                Select a user to views their test results
               </div>
             )}
           </div>

@@ -207,7 +207,7 @@ This document is confidential and for your personal records.
         <div className="border-b border-gray-200 p-6">
           <h2 className="text-2xl font-bold text-gray-900">Health Test Results</h2>
           <p className="mt-2 text-sm text-gray-600">
-            Please enter your test results before and after treatment
+            Please enter your test results before and after treatments
           </p>
         </div>
 
