@@ -12,6 +12,7 @@ import AdminTestResults from './components/AdminTestResults'
 import AdminDashboard from './components/AdminDashboard'
 import UserLogin from './components/UserLogin'
 import UserSignup from './components/UserSignup'
+import UserTestHistory from './components/UserTestHistory'
 
 function App() {
   const [user, setUser] = useState(null)
@@ -150,6 +151,18 @@ function App() {
               <AdminTestResults />
             ) : (
               <Navigate to="/login" replace />
+            )
+          } 
+        />
+        <Route 
+          path="/history" 
+          element={
+            loading ? (
+              <div>Loading...</div>
+            ) : user ? (
+              <UserTestHistory user={user} />
+            ) : (
+              <Navigate to="/auth/login" replace />
             )
           } 
         />
