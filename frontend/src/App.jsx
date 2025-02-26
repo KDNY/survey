@@ -114,9 +114,7 @@ function App() {
             user ? (
               <Navigate to="/" replace />
             ) : (
-              <UserLogin 
-                onLogin={setUser}
-              />
+              <UserLogin onLogin={setUser} />
             )
           } 
         />
