@@ -16,8 +16,17 @@ function UserTestHistory({ user }) {
     try {
       setLoading(true)
       const { data: results, error } = await supabase
-        .from('user_test_results_with_users')
-        .select('*')
+        .from('user_test_results')
+        .select(`
+          *,
+          testing_items:testing_item_id (
+            name_en,
+            name_secondary,
+            measurement_unit,
+            reference_range,
+            interpretation
+          )
+        `)
         .eq('user_id', user.id)
         .order('test_date', { ascending: false })
 
@@ -54,15 +63,26 @@ function UserTestHistory({ user }) {
             View all your previous test results
           </p>
         </div>
-        <button
-          onClick={handleLogout}
-          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700"
-        >
-          <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-          </svg>
-          Logout
-        </button>
+        <div className="flex items-center space-x-4">
+          <button
+            onClick={() => navigate('/')}
+            className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+          >
+            <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+            </svg>
+            Back to Test Form
+          </button>
+          <button
+            onClick={handleLogout}
+            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700"
+          >
+            <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            Logout
+          </button>
+        </div>
       </div>
 
       {/* Test History Table */}
@@ -98,24 +118,24 @@ function UserTestHistory({ user }) {
                     {new Date(result.test_date).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{result.name_en}</div>
-                    <div className="text-sm text-gray-500">{result.name_secondary}</div>
+                    <div className="text-sm font-medium text-gray-900">{result.testing_items.name_en}</div>
+                    <div className="text-sm text-gray-500">{result.testing_items.name_secondary}</div>
                   </td>
                   <td className="px-6 py-4 text-center whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
-                      {result.before_value} <span className="text-gray-500">{result.measurement_unit}</span>
+                      {result.before_value} <span className="text-gray-500">{result.testing_items.measurement_unit}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4 text-center whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
-                      {result.after_value} <span className="text-gray-500">{result.measurement_unit}</span>
+                      {result.after_value} <span className="text-gray-500">{result.testing_items.measurement_unit}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {result.reference_range}
+                    {result.testing_items.reference_range}
                   </td>
                   <td className="px-6 py-4">
-                    <div className="text-sm text-gray-600 max-w-xs">{result.interpretation}</div>
+                    <div className="text-sm text-gray-600 max-w-xs">{result.testing_items.interpretation}</div>
                   </td>
                 </tr>
               ))}
