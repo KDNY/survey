@@ -19,6 +19,7 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -114,7 +115,10 @@ function App() {
             user ? (
               <Navigate to="/" replace />
             ) : (
-              <UserLogin onLogin={setUser} />
+              <UserLogin 
+                onLogin={setUser}
+                onSwitchToSignup={() => navigate('/auth/signup')}
+              />
             )
           } 
         />
@@ -126,6 +130,7 @@ function App() {
             ) : (
               <UserSignup 
                 onSignup={setUser}
+                onSwitchToLogin={() => navigate('/auth/login')}
               />
             )
           } 
