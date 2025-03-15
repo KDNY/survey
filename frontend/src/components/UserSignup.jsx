@@ -38,16 +38,18 @@ function UserSignup({ onSignup, onSwitchToLogin }) {
         options: {
           data: {
             name: formData.name
-          }
+          },
+          emailRedirectTo: `${window.location.origin}/auth/confirm`
         }
       })
 
       if (error) throw error
 
-      console.log('Signed up:', data)
+      console.log('Signup response:', data)
+
       if (data?.user?.identities?.length === 0) {
         setSuccess(true)
-        setMessage('Please check your email to confirm your account.')
+        setMessage(`A confirmation email has been sent to ${formData.email}. Please check your inbox and spam folder.`)
         setFormData({
           email: '',
           password: '',
@@ -58,7 +60,28 @@ function UserSignup({ onSignup, onSwitchToLogin }) {
         onSignup(data.user)
       }
     } catch (error) {
-      console.error('Error:', error)
+      console.error('Signup error:', error)
+      setError(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleResendConfirmation = async () => {
+    try {
+      setLoading(true)
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: formData.email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/confirm`
+        }
+      })
+      
+      if (error) throw error
+      
+      setMessage('Confirmation email has been resent. Please check your inbox.')
+    } catch (error) {
       setError(error.message)
     } finally {
       setLoading(false)
@@ -90,6 +113,32 @@ function UserSignup({ onSignup, onSwitchToLogin }) {
                   <p className="text-sm text-red-700">{error}</p>
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* Success Message */}
+          {success && (
+            <div className="mb-6 bg-green-50 border-l-4 border-green-400 p-4">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-green-700">{message}</p>
+                  <p className="text-sm text-green-600 mt-2">
+                    If you don't see the email, please check your spam folder.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={handleResendConfirmation}
+                disabled={loading}
+                className="mt-4 w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+              >
+                {loading ? 'Sending...' : 'Resend Confirmation Email'}
+              </button>
             </div>
           )}
 
