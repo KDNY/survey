@@ -13,6 +13,7 @@ import AdminDashboard from './components/AdminDashboard'
 import UserLogin from './components/UserLogin'
 import UserSignup from './components/UserSignup'
 import UserTestHistory from './components/UserTestHistory'
+import EmailConfirmation from './components/EmailConfirmation'
 
 function App() {
   const [user, setUser] = useState(null)
@@ -132,6 +133,14 @@ function App() {
                 onSwitchToLogin={() => window.location.href = '/auth/login'}
               />
             )
+          } 
+        />
+        <Route 
+          path="/auth/confirm" 
+          element={
+            <EmailConfirmation 
+              onConfirmed={setUser}
+            />
           } 
         />
         <Route 

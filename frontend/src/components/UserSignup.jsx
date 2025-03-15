@@ -4,6 +4,8 @@ import supabase from '../lib/supabase'
 function UserSignup({ onSignup, onSwitchToLogin }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [success, setSuccess] = useState(false)
+  const [message, setMessage] = useState('')
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -43,7 +45,18 @@ function UserSignup({ onSignup, onSwitchToLogin }) {
       if (error) throw error
 
       console.log('Signed up:', data)
-      onSignup(data.user)
+      if (data?.user?.identities?.length === 0) {
+        setSuccess(true)
+        setMessage('Please check your email to confirm your account.')
+        setFormData({
+          email: '',
+          password: '',
+          confirmPassword: '',
+          name: ''
+        })
+      } else {
+        onSignup(data.user)
+      }
     } catch (error) {
       console.error('Error:', error)
       setError(error.message)
