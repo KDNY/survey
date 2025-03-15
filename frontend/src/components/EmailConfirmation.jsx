@@ -14,14 +14,16 @@ function EmailConfirmation({ onConfirmed }) {
         // Get the token from URL parameters
         const token = searchParams.get('token')
         const type = searchParams.get('type')
+        const email = searchParams.get('email')
 
-        if (!token || type !== 'signup') {
+        if (!token) {
           throw new Error('Invalid confirmation link')
         }
 
-        // Verify the token with Supabase
+        // Verify the email with Supabase
         const { data, error } = await supabase.auth.verifyOtp({
-          token_hash: token,
+          email,
+          token,
           type: 'signup'
         })
 
@@ -78,7 +80,7 @@ function EmailConfirmation({ onConfirmed }) {
                   Email Confirmed!
                 </h2>
                 <p className="text-gray-600">
-                  Redirecting you to the dashboard...
+                  Your email has been confirmed. Redirecting you to the dashboard...
                 </p>
               </>
             )}
