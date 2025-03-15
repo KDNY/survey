@@ -13,14 +13,12 @@ import AdminDashboard from './components/AdminDashboard'
 import UserLogin from './components/UserLogin'
 import UserSignup from './components/UserSignup'
 import UserTestHistory from './components/UserTestHistory'
-import UserLoginWrapper from './components/UserLoginWrapper'
 
 function App() {
   const [user, setUser] = useState(null)
   const [isAdmin, setIsAdmin] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const navigate = useNavigate()
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -116,7 +114,7 @@ function App() {
             user ? (
               <Navigate to="/" replace />
             ) : (
-              <UserLoginWrapper onLogin={setUser} />
+              <UserLogin onLogin={setUser} />
             )
           } 
         />
